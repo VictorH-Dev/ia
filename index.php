@@ -8,11 +8,11 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Login</title>
+	<title>Entrar</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 	<link rel="stylesheet" 
 	      href="css/style.css">
-	<link rel="icon" href="img/logo.png">
+	<link rel="icon" href="img/logo.jpg">
 	<style>
 		.esquecido{
     color: red;
@@ -72,7 +72,9 @@
 		  <a href="signup.php">Cadastrar</a>
 		</form>
 		<a class="esquecido" href="esqueci_senha.php">Esqueci minha senha</a>
+		
 	 </div>
+	
 </body>
 </html>
 <?php

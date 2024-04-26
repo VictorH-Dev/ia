@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'app/db.conn.php'; // Inclua seu arquivo de conexão com o banco de dados
+include 'app/db.conn.php'; 
 
 $userId = $_POST['userId'] ?? null;
 $groupId = $_POST['groupId'] ?? null;
@@ -8,7 +8,7 @@ $groupId = $_POST['groupId'] ?? null;
 $response = ['success' => false, 'error_message' => ''];
 
 if ($userId && $groupId) {
-    // Aqui você deve adicionar a lógica para inserir o novo membro no banco de dados
+
     $stmt = $conn->prepare("INSERT INTO group_members (group_id, user_id) VALUES (?, ?)");
     if ($stmt->execute([$groupId, $userId])) {
         $response['success'] = true;

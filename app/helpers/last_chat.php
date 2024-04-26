@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 function lastChat($id_1, $id_2, $conn){
    
@@ -10,11 +10,19 @@ function lastChat($id_1, $id_2, $conn){
     $stmt->execute([$id_1, $id_2, $id_1, $id_2]);
 
     if ($stmt->rowCount() > 0) {
-    	$chat = $stmt->fetch();
-    	return $chat['message'];
-    }else {
-    	$chat = '';
-    	return $chat;
-    }
+        $chat = $stmt->fetch();
+        $message = $chat['message'];
+        $limit = 50; // Set the character limit for the message
 
+        // Truncate the message if it exceeds the limit
+        if (strlen($message) > $limit) {
+            return substr($message, 0, $limit) . '...';
+        } else {
+            return $message;
+        }
+    } else {
+        $chat = '';
+        return $chat;
+    }
 }
+?>

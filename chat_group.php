@@ -1,31 +1,26 @@
 <?php
 session_start();
-include 'app/db.conn.php'; // Inclua seu arquivo de conexão com o banco de dados
-
-// Verifique se o usuário está logado
+include 'app/db.conn.php'; 
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit;
 }
 
 $userId = $_SESSION['user_id'];
-$groupId = $_GET['group_id'] ?? null; // O ID do grupo deve ser passado como parâmetro na URL
+$groupId = $_GET['group_id'] ?? null; 
 
-// Buscar mensagens do grupo
 function getGroupChats($groupId, $conn) {
-    // Modifique a consulta para incluir o nome do usuário
+
     $stmt = $conn->prepare("SELECT group_chats.*, users.name FROM group_chats JOIN users ON group_chats.from_id = users.user_id WHERE group_id = ? ORDER BY created_at ASC");
     $stmt->execute([$groupId]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// Enviar mensagem para o grupo
 function sendMessageToGroup($groupId, $userId, $message, $conn) {
     $stmt = $conn->prepare("INSERT INTO group_chats (group_id, from_id, message) VALUES (?, ?, ?)");
     $stmt->execute([$groupId, $userId, $message]);
 }
 
-// Verifique se o usuário pertence ao grupo
 $stmt = $conn->prepare("SELECT 1 FROM group_members WHERE group_id = ? AND user_id = ?");
 $stmt->execute([$groupId, $userId]);
 $isUserInGroup = $stmt->fetchColumn();
@@ -35,7 +30,6 @@ if (!$isUserInGroup) {
     exit;
 }
 
-// Tratamento do envio de mensagens
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['message'])) {
     $message = trim($_POST['message']);
     if ($message !== '') {
@@ -59,10 +53,10 @@ $groupChats = getGroupChats($groupId, $conn);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat do Grupo</title>
-    <!-- Adicione aqui seus estilos e scripts -->
+
 </head>
 <body>
-<style>/* Estilos gerais */
+<style>
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f7f7f7;
@@ -80,7 +74,7 @@ body {
     overflow: hidden;
 }
 
-/* Cabeçalho do chat */
+
 .chat-container h1 {
     background-color: #007bff;
     color: #fff;
@@ -89,7 +83,7 @@ body {
     text-align: center;
 }
 
-/* Área de mensagens */
+
 .messages {
     height: 300px;
     overflow-y: auto;
@@ -97,7 +91,6 @@ body {
     background-color: #e9ecef;
 }
 
-/* Mensagens */
 .message {
     margin-bottom: 10px;
     padding: 5px;
@@ -128,7 +121,6 @@ body {
     color: #888;
 }
 
-/* Formulário de envio de mensagem */
 form {
     padding: 10px;
     background-color: #f7f7f7;
@@ -156,7 +148,7 @@ form button {
 form button:hover {
     background-color: #0056b3;
 }
-/* Estilos para o link como botão */
+
 a.button {
     display: inline-block;
     margin: 10px auto;
@@ -186,7 +178,7 @@ a.button:hover {
         <div class="messages">
         <?php foreach ($groupChats as $chat): ?>
     <div class="message <?= $chat['from_id'] == $userId ? 'sent' : 'received' ?>">
-        <!-- Exiba o nome do usuário em vez do user_id -->
+
         <span class="user"><?= htmlspecialchars($chat['name']) ?>:</span>
         <p class="text"><?= htmlspecialchars($chat['message']) ?></p>
         <span class="time"><?= htmlspecialchars($chat['created_at']) ?></span>
@@ -208,14 +200,14 @@ document.addEventListener('DOMContentLoaded', function() {
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    // Adiciona o ouvinte de evento ao campo de texto da mensagem
+ 
     var messageInput = document.querySelector('textarea[name="message"]');
     messageInput.addEventListener('keypress', function(event) {
-        // Verifica se a tecla Enter foi pressionada
+   
         if (event.key === 'Enter') {
-            event.preventDefault(); // Impede a quebra de linha no campo de texto
-            var form = this.closest('form'); // Encontra o formulário mais próximo
-            form.submit(); // Envia o formulário
+            event.preventDefault(); 
+            var form = this.closest('form'); 
+            form.submit(); 
         }
     });
 });

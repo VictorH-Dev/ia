@@ -49,22 +49,19 @@ small {
 	background: #3289c8;
 	color: #fff;
 }
-/* width */
+
 *::-webkit-scrollbar {
   width: 3px;
 }
 
-/* Track */
 *::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
 
-/* Handle */
 *::-webkit-scrollbar-thumb {
   background: #aaa;
 }
 
-/* Handle on hover */
 *::-webkit-scrollbar-thumb:hover {
   background: #3289c8;
 }
@@ -73,17 +70,17 @@ textarea {
 	resize: none;
 }
 
-/*message_status*/.custom-file-input {
-    display: none; /* Esconde o input padrão */
+.custom-file-input {
+    display: none; 
 }
 .custom-file-label {
     background: transparent;
     border: none;
-    padding-left: 10px; /* Espaçamento para o ícone de clipe */
-    cursor: pointer; /* Muda o cursor para indicar ação */
+    padding-left: 10px; 
+    cursor: pointer; 
 }
 .custom-file-label::after {
-    content: "\f0c6"; /* Código do ícone de clipe do FontAwesome */
+    content: "\f0c6"; 
     font-family: 'FontAwesome';
     position: absolute;
     top: 50%;
@@ -93,30 +90,30 @@ textarea {
     cursor: pointer;
 }
 .input-group-text i {
-    margin-right: 5px; /* Ajuste conforme necessário para alinhamento */
+    margin-right: 5px; 
 }
 #inputGroupFileAddon {
     border: none;
-    background-color: transparent; /* Ou qualquer cor de fundo desejada */
+    background-color: transparent; 
 }.input-group-append .btn {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
 }
 #file-upload {
-    display: none; /* Esconde o input de arquivo */
+    display: none; 
 }
 .input-group-text {
     background: transparent;
     border: none;
-    margin-right: -1px; /* Ajusta o espaçamento entre os ícones */
+    margin-right: -1px; 
 }
 
 .input-group-append {
-    margin-left: -1px; /* Ajusta o espaçamento entre os ícones */
+    margin-left: -1px;
 }
 
 .input-group .form-control {
-    border-right: none; /* Remove a borda entre o campo de texto e o botão */
+    border-right: none; 
 }
 
 .btn-primary {
@@ -124,19 +121,17 @@ textarea {
     border-bottom-left-radius: 0;
 }
 
-/* Estilos adicionais para garantir que a barra de entrada esteja alinhada e bonita */
 .form-control::placeholder {
-    color: #aaa; /* Cor do placeholder */
+    color: #aaa; 
 }
 
 .form-control:focus {
-    box-shadow: none; /* Remove o glow ao focar no campo de texto */
+    box-shadow: none; 
 }
 
-/* Ajustes para responsividade e alinhamento */
 @media (max-width: 768px) {
     .input-group-text, .btn-primary {
-        border-radius: 0; /* Botões quadrados em telas menores */
+        border-radius: 0; 
     }
 }.input-group-append .btn {
     border-radius: 0;
@@ -157,14 +152,12 @@ textarea {
     background: #e2e6ea;
 }
 
-/* Ajuste para que o ícone de clipe fique visível */
 .btn-outline-secondary {
     color: #495057;
     background-color: transparent;
     border-color: #ced4da;
 }
 
-/* Ajuste para que o ícone de clipe não tenha fundo escuro ao ser clicado */
 .btn-outline-secondary:not(:disabled):not(.disabled).active, 
 .btn-outline-secondary:not(:disabled):not(.disabled):active,
 .show>.btn-outline-secondary.dropdown-toggle {
@@ -174,8 +167,8 @@ textarea {
 }/* CSS */
 .emoji-menu {
     position: absolute;
-    bottom: 50px; /* Ajuste conforme necessário para alinhar com o botão de enviar */
-    left: 10px; /* Ajuste conforme necessário */
+    bottom: 50px; 
+    left: 10px; 
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 15px;
     padding: 5px;

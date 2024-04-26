@@ -2,11 +2,8 @@
 
 session_start();
 
-# check if the user is logged in
 if (isset($_SESSION['username'])) {
-    # check if the key is submitted
     if(isset($_POST['key'])){
-       # database connection file
 	   include '../db.conn.php';
 
 	   # creating simple search algorithm :) 

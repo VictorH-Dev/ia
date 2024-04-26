@@ -3,9 +3,9 @@ $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $id_da_mensagem);
 
 if ($stmt->execute()) {
-    // A atualização foi bem-sucedida
+
     echo "Mensagem atualizada para visualizada.";
 } else {
-    // A atualização falhou
+
     echo "Erro ao atualizar a mensagem: " . $stmt->error;
 }?

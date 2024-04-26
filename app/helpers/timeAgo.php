@@ -1,7 +1,5 @@
 <?php
 
-
-// Definindo o fuso horário
 date_default_timezone_set('America/Sao_Paulo');
 
 function last_seen($datetime) {

@@ -2,12 +2,10 @@
 
 session_start();
 
-# Verifique se o usuário está logado
 if (isset($_SESSION['username'])) {
 
     if (isset($_POST['id_2'])) {
     
-        # Arquivo de conexão com o banco de dados
         include '../db.conn.php';
 
         $id_1  = $_SESSION['user_id'];
@@ -23,7 +21,7 @@ if (isset($_SESSION['username'])) {
         if ($stmt->rowCount() > 0) {
             $chats = $stmt->fetchAll();
 
-            # Percorrendo as mensagens do chat
+
             foreach ($chats as $chat) {
                 if ($chat['opened'] == 0) {
                     
@@ -36,7 +34,6 @@ if (isset($_SESSION['username'])) {
                     $stmt2 = $conn->prepare($sql2);
                     $stmt2->execute([$opened, $chat_id]); 
 
-                    # Exibição da mensagem
                     ?>
                       <p class="ltext border rounded p-2 mb-1">
                         <?=$chat['message']?> 
@@ -46,8 +43,6 @@ if (isset($_SESSION['username'])) {
                       </p>        
                     <?php
 
-                    # Aqui você deve adicionar a lógica para buscar e exibir arquivos
-                    # Suponha que você tenha uma tabela 'arquivos' onde os arquivos são armazenados
                     $sql3 = "SELECT * FROM arquivos WHERE chat_id = ?";
                     $stmt3 = $conn->prepare($sql3);
                     $stmt3->execute([$chat_id]);
@@ -55,7 +50,7 @@ if (isset($_SESSION['username'])) {
                     if ($stmt3->rowCount() > 0) {
                         $arquivos = $stmt3->fetchAll();
                         foreach ($arquivos as $arquivo) {
-                            # Exibição do link do arquivo
+
                             echo "<p><a href='uploads/" . $arquivo['nome_arquivo'] . "' download>" . $arquivo['nome_arquivo'] . "</a></p>";
                         }
                     }

@@ -1,27 +1,19 @@
 <?php
-// Inicie a sessão e inclua o arquivo de conexão com o banco de dados
 session_start();
 include 'app/db.conn.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
     $new_password = $_POST['new_password'];
-
-    // Verifique se o nome de usuário existe no banco de dados
     $stmt = $conn->prepare("SELECT * FROM users WHERE username=?");
     $stmt->execute([$username]);
     $user = $stmt->fetch();
 
     if ($user) {
-        // Atualize a senha do usuário no banco de dados
         $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
         $stmt = $conn->prepare("UPDATE users SET password=? WHERE username=?");
         $stmt->execute([$hashed_password, $username]);
-
-        // Defina a mensagem de sucesso na sessão
         $_SESSION['success'] = "Sua senha foi redefinida com sucesso.";
-
-        // Redirecione para index.php
         header('Location: index.php');
         exit();
     } else {
@@ -36,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <title>Redefinir Senha</title>
     <style>
-        /* reset_senha.css */
+  
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f7f7f7;
@@ -74,7 +66,7 @@ input[type="password"] {
     margin-bottom: 20px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    box-sizing: border-box; /* Add this line to include padding in width */
+    box-sizing: border-box; 
 }
 
 button {

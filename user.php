@@ -2,7 +2,7 @@
 session_start();
 include 'app/db.conn.php';
 
-// Verifica se uma nova imagem foi enviada
+
 if(isset($_FILES["fotoPerfil"])) {
     $user_id = filter_var($_POST['user_id'], FILTER_SANITIZE_NUMBER_INT);
 
@@ -15,13 +15,12 @@ if(isset($_FILES["fotoPerfil"])) {
     $novo_nome_arquivo = uniqid() . '.' . strtolower(pathinfo($fotoPerfil["name"], PATHINFO_EXTENSION));
     $target_file = $target_dir . $novo_nome_arquivo;
 
-    // Verifica se a imagem atual não é a padrão antes de tentar excluí-la
     $stmt = $conn->prepare("SELECT p_p FROM users WHERE user_id = ?");
     $stmt->bindValue(1, $user_id);
     $stmt->execute();
     $user = $stmt->fetch();
     if ($user && $user['p_p'] !== 'user-default.png') {
-        // Exclui a imagem de perfil anterior
+
         unlink($target_dir . $user['p_p']);
     }
 
@@ -54,7 +53,7 @@ if(isset($_FILES["fotoPerfil"])) {
         }
         $stmt->close();
     } else {
-        // Adiciona erro de falha no upload
+  
         $errors[] = "Falha ao mover o arquivo para o diretório de destino.";
     }
 

@@ -18,7 +18,7 @@
   	opened($chatWith['user_id'], $conn, $chats);
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,7 +26,7 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 	<link rel="stylesheet" 
 	      href="css/style.css">
-	<link rel="icon" href="img/logo.png">
+	<link rel="icon" href="img/logo.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
@@ -77,11 +77,11 @@
                     <small class="d-block">
                         <?=date('d/m/Y H:i', strtotime($chat['created_at']))?>
                     </small>
-                    <!-- Ícones de ação -->
+                   
                     <span class="message-actions">
-                        <!-- Ícone de lixeira para excluir a mensagem -->
+                      
                         <i class="fa fa-trash icon" onclick="deleteMessage(<?=$chat['chat_id']?>)" title="Excluir mensagem"></i>
-                        <!-- Ícone de lápis para editar a mensagem -->
+                      
                         <i class="fa fa-pencil icon" onclick="editMessage(<?=$chat['chat_id']?>, '<?=addslashes($chat['message'])?>')" title="Editar mensagem"></i>
                     </span>
                 </p>
@@ -101,10 +101,10 @@
         </div>
     <?php } ?>
 </div>
-		  <!-- HTML -->
+	
 <div class="input-group mb-3">
 <div class="emoji-menu" style="display:none; position: absolute; bottom: 50px; left: 10px; background-color: rgba(255, 255, 255, 0.9); border-radius: 15px; padding: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); z-index: 1000;">
-        <!-- Emojis de sorriso -->
+
         <span onclick="inserirEmoji('😀')">😀</span>
         <span onclick="inserirEmoji('😃')">😃</span>
         <span onclick="inserirEmoji('😄')">😄</span>
@@ -115,24 +115,18 @@
         <span onclick="inserirEmoji('🤣')">🤣</span>
         <span onclick="inserirEmoji('😊')">😊</span>
         <span onclick="inserirEmoji('😇')">😇</span>
-        <!-- ... Continue adicionando emojis conforme desejado -->
-        <!-- Emojis de tristeza -->
         <span onclick="inserirEmoji('😞')">😞</span>
         <span onclick="inserirEmoji('😔')">😔</span>
         <span onclick="inserirEmoji('😟')">😟</span>
         <span onclick="inserirEmoji('😕')">😕</span>
         <span onclick="inserirEmoji('🙁')">🙁</span>
         <span onclick="inserirEmoji('☹️')">☹️</span>
-        <!-- ... -->
-        <!-- Emojis de amor -->
         <span onclick="inserirEmoji('😍')">😍</span>
         <span onclick="inserirEmoji('🥰')">🥰</span>
         <span onclick="inserirEmoji('😘')">😘</span>
         <span onclick="inserirEmoji('😗')">😗</span>
         <span onclick="inserirEmoji('😙')">😙</span>
         <span onclick="inserirEmoji('😚')">😚</span>
-        <!-- ... -->
-        <!-- Outros emojis podem ser adicionados aqui, categorizados conforme desejado -->
     </div>
     <textarea cols="3" id="message" class="form-control"></textarea>
     <button onclick="toggleEmojiMenu()" class="btn btn-outline-secondary">
@@ -145,7 +139,6 @@
     </div>
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-// Função para excluir uma mensagem
 function deleteMessage(chatId) {
     if (confirm('Tem certeza que deseja excluir esta mensagem?')) {
         var xhr = new XMLHttpRequest();
@@ -155,7 +148,7 @@ function deleteMessage(chatId) {
             if (this.status == 200 && this.responseText === 'success') {
                 var messageElement = document.querySelector('.send-msg[data-chat-id="' + chatId + '"]');
                 if (messageElement) {
-                    messageElement.remove(); // Remove a mensagem do DOM
+                    messageElement.remove(); 
                 }
             } else {
                 alert('Erro ao excluir a mensagem.');
@@ -165,10 +158,9 @@ function deleteMessage(chatId) {
     }
 }
 
-// Função para editar uma mensagem
 function editMessage(chatId, message) {
     var newMessage = prompt('Editar mensagem:', message);
-    if (newMessage !== null && newMessage !== message) { // Verifica se a mensagem foi alterada
+    if (newMessage !== null && newMessage !== message) { 
         var xhr = new XMLHttpRequest();
         xhr.open('POST', 'edit_message.php', true);
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -176,7 +168,7 @@ function editMessage(chatId, message) {
             if (this.status == 200 && this.responseText === 'success') {
                 var messageElement = document.querySelector('.send-msg[data-chat-id="' + chatId + '"] .rtext');
                 if (messageElement) {
-                    messageElement.textContent = newMessage; // Atualiza a mensagem no DOM
+                    messageElement.textContent = newMessage; 
                 }
             } else {
                 alert('Erro ao editar a mensagem.');
@@ -186,7 +178,6 @@ function editMessage(chatId, message) {
     }
 }
 
-// Adicionando evento para mudar o cursor para 'pointer' nos ícones
 document.addEventListener('DOMContentLoaded', function() {
     var icons = document.querySelectorAll('.icon');
     icons.forEach(function(icon) {
@@ -196,8 +187,8 @@ document.addEventListener('DOMContentLoaded', function() {
 var messageInput = document.getElementById('message');
 messageInput.addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
-        e.preventDefault(); // Impede a quebra de linha no campo de texto
-        document.getElementById('sendBtn').click(); // Simula um clique no botão de enviar
+        e.preventDefault();
+        document.getElementById('sendBtn').click(); 
     }
 });
 	var scrollDown = function(){
@@ -243,11 +234,11 @@ messageInput.addEventListener('keypress', function(e) {
       fechData();
       setInterval(fechData, 500);
 $.post('marcarComoLida.php', { conversationId: idDaConversa }, function(data) {
-    alert(data); // Alerta com a resposta do servidor
+    alert(data); 
 });
     
     });
-	// JavaScript
+
 function toggleEmojiMenu() {
     var emojiMenu = document.querySelector('.emoji-menu');
     emojiMenu.style.display = emojiMenu.style.display == 'none' ? 'block' : 'none';
@@ -255,9 +246,9 @@ function toggleEmojiMenu() {
 
 function inserirEmoji(emoji) {
     var messageInput = document.getElementById('message');
-    messageInput.value += emoji; // Adiciona o emoji no final do texto
-    messageInput.focus(); // Mantém o foco na caixa de texto
-}// JavaScript
+    messageInput.value += emoji;
+    messageInput.focus(); 
+}
 function toggleEmojiMenu() {
     var emojiMenu = document.querySelector('.emoji-menu');
     emojiMenu.style.display = emojiMenu.style.display == 'none' ? 'block' : 'none';
@@ -265,38 +256,37 @@ function toggleEmojiMenu() {
 
 function inserirEmoji(emoji) {
     var messageInput = document.getElementById('message');
-    messageInput.value += emoji; // Adiciona o emoji no final do texto
-    messageInput.focus(); // Mantém o foco na caixa de texto
+    messageInput.value += emoji; 
+    messageInput.focus(); 
 }
-// Front-end: Detectar digitação e enviar sinal de digitação
+
 const inputField = document.getElementById('inputField');
 const typingIndicator = document.getElementById('typingIndicator');
 let typingTimeout;
 
-// Configurar a conexão WebSocket
+
 const socket = new WebSocket('ws://seu-servidor.com');
 
 inputField.addEventListener('input', () => {
-    // Limpar o timeout anterior se houver
+
     clearTimeout(typingTimeout);
 
-    // Enviar sinal de "digitando" para o servidor
+
     socket.send(JSON.stringify({ typing: true }));
 
-    // Configurar um timeout para parar de mostrar "digitando" após um tempo sem digitação
+ 
     typingTimeout = setTimeout(() => {
         socket.send(JSON.stringify({ typing: false }));
-    }, 3000); // 3 segundos de intervalo
+    }, 3000); 
 });
 
-// Back-end: Receber e transmitir sinal de digitação (usando Node.js e WebSocket)
 const WebSocketServer = require('ws').Server;
 const wss = new WebSocketServer({ port: 8080 });
 
 wss.on('connection', (ws) => {
     ws.on('message', (message) => {
         const data = JSON.parse(message);
-        // Transmitir para todos os usuários exceto o que está digitando
+  
         wss.clients.forEach((client) => {
             if (client !== ws && client.readyState === WebSocket.OPEN) {
                 client.send(message);
@@ -305,7 +295,6 @@ wss.on('connection', (ws) => {
     });
 });
 
-// Front-end: Receber notificação de digitação e exibir
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
     if (data.typing) {
