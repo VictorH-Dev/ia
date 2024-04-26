@@ -33,6 +33,10 @@
        .icon{
         cursor: pointer;
        }
+       
+       .azuli{
+        color: #0d6efd;
+       }
       
     </style>
 </head>
@@ -75,21 +79,22 @@
                 <p class="rtext align-self-end border rounded p-2 mb-1">
                     <?=htmlspecialchars($chat['message'], ENT_QUOTES, 'UTF-8')?>
                     <small class="d-block">
-                        <?=date('d/m/Y H:i', strtotime($chat['created_at']))?>
-                    </small>
-                   
-                    <span class="message-actions">
+                    <?= date_format(date_create($chat['created_at']), 'd/m/Y H:i') ?>
+                    <span  class="azuli" class="message-actions">
                       
                         <i class="fa fa-trash icon" onclick="deleteMessage(<?=$chat['chat_id']?>)" title="Excluir mensagem"></i>
                       
                         <i class="fa fa-pencil icon" onclick="editMessage(<?=$chat['chat_id']?>, '<?=addslashes($chat['message'])?>')" title="Editar mensagem"></i>
                     </span>
+                    </small>
+                   
+                    
                 </p>
             <?php } else { ?>
                 <p class="ltext border rounded p-2 mb-1">
                     <?=htmlspecialchars($chat['message'], ENT_QUOTES, 'UTF-8')?>
                     <small class="d-block">
-                        <?=date('d/m/Y H:i', strtotime($chat['created_at']))?>
+                    <?= date_format(date_create($chat['created_at']), 'd/m/Y H:i') ?>
                     </small>      
                 </p>
             <?php }

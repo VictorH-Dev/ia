@@ -144,6 +144,7 @@ class="d-flex
 	    					<?php } ?>
 	    				</a>
 	    			</li>
+                    
     			    <?php } ?>
     			<?php }else{ ?>
     				<div class="alert alert-info 
@@ -225,6 +226,7 @@ class="d-flex
       setInterval(lastSeenUpdate, 10000);
 
     });
+    
 </script>
 </body>
 </html>
