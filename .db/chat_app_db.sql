@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 27/04/2024 às 19:40
+-- Tempo de geração: 14/05/2024 às 19:54
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -102,7 +102,7 @@ INSERT INTO `chats` (`chat_id`, `from_id`, `to_id`, `message`, `is_group_message
 (28, 5, 7, 'ðŸ˜žperdi minha conta vey\n', 0, 1, '2024-04-12 23:47:00'),
 (29, 7, 1, 'Ficou massa ðŸ˜†', 0, 1, '2024-04-12 23:48:32'),
 (30, 7, 5, 'Kkkkkkk acontece ', 0, 1, '2024-04-12 23:49:16'),
-(31, 2, 5, 'Oi dlc', 0, 1, '2024-04-12 23:50:15'),
+(31, 2, 5, 'oie bb', 0, 1, '2024-04-12 23:50:15'),
 (32, 5, 7, 'funcionouuuuuuuuuuuuuuuuuuuuu', 0, 0, '2024-04-12 23:50:16'),
 (33, 5, 7, 'coloca uma foto de perfil para mim ver se vai', 0, 0, '2024-04-12 23:50:30'),
 (34, 8, 5, 'olÃ¡\n', 0, 1, '2024-04-13 00:03:28'),
@@ -159,7 +159,15 @@ INSERT INTO `chats` (`chat_id`, `from_id`, `to_id`, `message`, `is_group_message
 (91, 12, 55, 'Olá, tudo bem? sou o Unibot, o Bot oficial do chat Online, venho te informar que esse e um projeto de faculdade, não somos uma empresa registrada. \r\nprojeto desenvolvido por Victor Hugo Santana (R.A), Wesley Feu (R.A), Silvio(R.A).', 0, 0, '2024-04-26 01:05:04'),
 (111, 12, 59, 'Olá, tudo bem? sou o Unibot, o Bot oficial do chat Online, venho te informar que esse e um projeto de faculdade, não somos uma empresa registrada.', 0, 1, '2024-04-26 01:30:59'),
 (113, 5, 59, 'opa', 0, 1, '2024-04-26 15:54:15'),
-(114, 59, 5, 'fala ai', 0, 1, '2024-04-26 15:54:27');
+(114, 59, 5, 'fala ai', 0, 1, '2024-04-26 15:54:27'),
+(117, 1, 3, 'oie', 0, 1, '2024-04-30 00:43:52'),
+(118, 1, 2, 'oi', 0, 1, '2024-04-30 00:45:35'),
+(119, 5, 1, 'oi', 0, 0, '2024-04-30 00:46:49'),
+(120, 5, 2, 'bb', 0, 1, '2024-04-30 00:48:28'),
+(121, 5, 2, 'bb', 0, 1, '2024-04-30 00:54:28'),
+(122, 5, 59, 'oie', 0, 1, '2024-04-30 00:57:43'),
+(124, 59, 5, 'oie', 0, 0, '2024-05-03 00:34:03'),
+(126, 59, 1, 'coe', 0, 0, '2024-05-03 18:08:14');
 
 -- --------------------------------------------------------
 
@@ -199,7 +207,9 @@ INSERT INTO `conversations` (`conversation_id`, `user_1`, `user_2`, `visualizada
 (19, 12, 55, 0),
 (20, 12, 56, 0),
 (37, 12, 59, 0),
-(39, 5, 59, 0);
+(39, 5, 59, 0),
+(40, 5, 1, 0),
+(42, 59, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -211,29 +221,9 @@ CREATE TABLE `groups` (
   `group_id` int(11) NOT NULL,
   `group_name` varchar(255) NOT NULL,
   `created_by` int(11) NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `group_image_path` varchar(255) DEFAULT 'user-default.png'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `groups`
---
-
-INSERT INTO `groups` (`group_id`, `group_name`, `created_by`, `created_at`) VALUES
-(1, 'oi', 5, '2024-04-13 14:39:36'),
-(2, 'oi', 5, '2024-04-13 14:42:02'),
-(3, 'oi', 5, '2024-04-13 14:46:45'),
-(4, 'Nati', 5, '2024-04-13 23:23:09'),
-(5, 'oi', 5, '2024-04-13 23:37:09'),
-(6, 'eu', 5, '2024-04-13 23:42:19'),
-(7, 'oie', 5, '2024-04-14 01:29:08'),
-(8, 'Deu certo?', 5, '2024-04-14 03:23:05'),
-(9, 'oi', 5, '2024-04-14 03:27:26'),
-(10, 'Nati', 5, '2024-04-14 21:24:45'),
-(11, 'oie', 2, '2024-04-14 21:27:34'),
-(12, 'aba', 2, '2024-04-14 21:28:03'),
-(13, 'xablau', 2, '2024-04-14 21:31:38'),
-(14, 'Te amo', 2, '2024-04-20 23:40:45'),
-(15, 'oie', 9, '2024-04-21 18:04:21');
 
 -- --------------------------------------------------------
 
@@ -250,34 +240,6 @@ CREATE TABLE `group_chats` (
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `group_chats`
---
-
-INSERT INTO `group_chats` (`group_chat_id`, `group_id`, `from_id`, `message`, `opened`, `created_at`) VALUES
-(1, 1, 5, 'ola', 0, '2024-04-13 22:05:24'),
-(2, 1, 5, 'ola', 0, '2024-04-13 23:08:59'),
-(3, 1, 5, 'ola', 0, '2024-04-13 23:09:00'),
-(4, 1, 5, 'ola', 0, '2024-04-13 23:09:02'),
-(5, 4, 5, 'ola', 0, '2024-04-13 23:23:17'),
-(6, 7, 5, 'ola', 0, '2024-04-14 01:29:15'),
-(7, 1, 2, 'opiie', 0, '2024-04-14 03:17:46'),
-(8, 1, 2, 'Migo', 0, '2024-04-14 03:20:17'),
-(9, 4, 2, 'migo?', 0, '2024-04-14 03:21:03'),
-(10, 8, 5, 'opa', 0, '2024-04-14 03:23:09'),
-(11, 8, 5, 'mor?', 0, '2024-04-14 03:33:26'),
-(12, 8, 2, 'oie bb', 0, '2024-04-14 03:33:46'),
-(13, 9, 5, 'Aqui tbm deu?', 0, '2024-04-14 03:34:07'),
-(14, 4, 5, 'opa', 0, '2024-04-14 03:41:16'),
-(15, 4, 5, 'opa', 0, '2024-04-14 03:42:48'),
-(16, 4, 5, 'opa', 0, '2024-04-14 03:42:50'),
-(17, 4, 5, 'opa', 0, '2024-04-14 03:45:32'),
-(18, 4, 1, 'oie gente', 0, '2024-04-14 19:30:47'),
-(19, 4, 5, 'oie', 0, '2024-04-14 21:03:38'),
-(20, 4, 5, 'bb', 0, '2024-04-14 21:03:55'),
-(21, 13, 1, 'iae', 0, '2024-04-20 23:41:47'),
-(22, 4, 2, 'ola', 0, '2024-04-25 02:18:44');
-
 -- --------------------------------------------------------
 
 --
@@ -289,22 +251,6 @@ CREATE TABLE `group_members` (
   `user_id` int(11) NOT NULL,
   `joined_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `group_members`
---
-
-INSERT INTO `group_members` (`group_id`, `user_id`, `joined_at`) VALUES
-(1, 3, '2024-04-14 03:16:54'),
-(4, 1, '2024-04-14 20:56:15'),
-(4, 2, '2024-04-14 03:47:17'),
-(4, 8, '2024-04-14 20:56:45'),
-(7, 3, '2024-04-14 02:58:44'),
-(7, 7, '2024-04-14 02:58:49'),
-(7, 8, '2024-04-14 02:58:51'),
-(11, 5, '2024-04-14 21:27:56'),
-(15, 9, '2024-04-21 18:04:21'),
-(15, 10, '2024-04-21 18:04:27');
 
 -- --------------------------------------------------------
 
@@ -335,24 +281,25 @@ CREATE TABLE `users` (
   `hobbies` text DEFAULT NULL,
   `profession` varchar(255) DEFAULT NULL,
   `age` int(11) DEFAULT NULL,
-  `biography` text DEFAULT NULL
+  `biography` text DEFAULT NULL,
+  `verificado` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `users`
 --
 
-INSERT INTO `users` (`user_id`, `name`, `username`, `password`, `p_p`, `visto`, `hobbies`, `profession`, `age`, `biography`) VALUES
-(1, 'dev', 'dev', '$2y$10$gPjrjrzwpUkn9Xwz.3vJ.elMEBrxc89Y1OqhwfMly4pMssfdFbd/u', '662b28522bcb7.png', '2024-04-14 03:01:27', NULL, NULL, NULL, NULL),
-(2, 'Nati', 'nati@gmail.com', '$2y$10$fCIMGsB42IRQ/fbyA48WUuqyoiag5kdWX95S.FWfN1HJkRq4DvglO', '662b2860f0baa.png', '2024-04-14 03:01:27', NULL, NULL, NULL, NULL),
-(3, 'eu', 'eu', '$2y$10$qVl3yTF3Z8JfvaDoGdiy4.y4dA10weK0qA7UfFadLHGlA4zNNnVgC', 'user-default.png', '2024-04-14 03:01:27', NULL, NULL, NULL, NULL),
-(5, 'Victor', 'admin', '$2y$10$ep3rXF6ot1pTNZ4BtQYQeu2OHzRz5ktn1gPN73NMIt4.hxF2ySZ5S', '661abefdee372.jpg', '2024-04-14 03:00:00', NULL, NULL, NULL, NULL),
-(7, 'Wendy ', 'Endy', '$2y$10$/PncwChbe23YsvrnZSycl.TwjxiUSos./VZ5v3bFvPuJj1SkbJ9jG', 'user-default.png', '2024-04-14 03:00:00', NULL, NULL, NULL, NULL),
-(8, 'MARIA', 'Maria', '$2y$10$HPlvqngBvs36erYOXbxooeVIotGxLMHISAVcNTe/gndC7tBGdXzEa', 'user-default.png', '2024-04-14 03:00:00', NULL, NULL, NULL, NULL),
-(9, 'Ariane', 'Ariane', '$2y$10$6ZuJu7kWcf7wQOlRlGfpouWTKBGzRhnr1MmJubduFwp17ShrSzKqC', '66257d072758d.jpg', '2024-04-21 20:53:49', NULL, NULL, NULL, NULL),
-(10, 'Paulo', 'Paulo', '$2y$10$G3e1zI0M.FhT2BOz0cmYqe8A90e6TeXad9DiMX7.3p5NSLyrab1bG', '66257cfb278aa.jpg', '2024-04-21 20:54:09', NULL, NULL, NULL, NULL),
-(12, 'UniBot✅', 'UniBot✅', '$2y$10$mNVDLYMZzF.YSwP7FiTN4.po..w/opT1OM9dTinq5T2LWrdTnH1wu', '6629df30e8f96.png', '2024-04-24 19:54:05', NULL, NULL, NULL, NULL),
-(59, 'victor', 'Victor', '$2y$10$RkvoeTVuOVxRqW/VeANrHOfBZbUMFOPEPzSeAuf1Xr8Atouiik7Ry', '662c8077b2f91.jpg', '2024-04-26 04:30:59', 'Desenvolver', 'Dev', 19, 'dev ne pae');
+INSERT INTO `users` (`user_id`, `name`, `username`, `password`, `p_p`, `visto`, `hobbies`, `profession`, `age`, `biography`, `verificado`) VALUES
+(1, 'dev', 'dev', '$2y$10$gPjrjrzwpUkn9Xwz.3vJ.elMEBrxc89Y1OqhwfMly4pMssfdFbd/u', '663542ffd9cd6.png', '2024-04-14 03:01:27', NULL, NULL, NULL, NULL, 1),
+(2, 'Nati', 'nati@gmail.com', '$2y$10$fCIMGsB42IRQ/fbyA48WUuqyoiag5kdWX95S.FWfN1HJkRq4DvglO', '662b2860f0baa.png', '2024-04-14 03:01:27', NULL, NULL, NULL, NULL, 0),
+(3, 'eu', 'eu', '$2y$10$qVl3yTF3Z8JfvaDoGdiy4.y4dA10weK0qA7UfFadLHGlA4zNNnVgC', 'user-default.png', '2024-04-14 03:01:27', NULL, NULL, NULL, NULL, 0),
+(5, 'Victor', 'admin', '$2y$10$ep3rXF6ot1pTNZ4BtQYQeu2OHzRz5ktn1gPN73NMIt4.hxF2ySZ5S', '661abefdee372.jpg', '2024-04-14 03:00:00', NULL, NULL, NULL, NULL, 0),
+(7, 'Wendy ', 'Endy', '$2y$10$/PncwChbe23YsvrnZSycl.TwjxiUSos./VZ5v3bFvPuJj1SkbJ9jG', 'user-default.png', '2024-04-14 03:00:00', NULL, NULL, NULL, NULL, 0),
+(8, 'MARIA', 'Maria', '$2y$10$HPlvqngBvs36erYOXbxooeVIotGxLMHISAVcNTe/gndC7tBGdXzEa', 'user-default.png', '2024-04-14 03:00:00', NULL, NULL, NULL, NULL, 0),
+(9, 'Ariane', 'Ariane', '$2y$10$6ZuJu7kWcf7wQOlRlGfpouWTKBGzRhnr1MmJubduFwp17ShrSzKqC', '66257d072758d.jpg', '2024-04-21 20:53:49', NULL, NULL, NULL, NULL, 0),
+(10, 'Paulo', 'Paulo', '$2y$10$G3e1zI0M.FhT2BOz0cmYqe8A90e6TeXad9DiMX7.3p5NSLyrab1bG', '66257cfb278aa.jpg', '2024-04-21 20:54:09', NULL, NULL, NULL, NULL, 0),
+(12, 'UniBot', 'UniBot', '$2y$10$2n1S/UovTFM5QAsGbBFRcuEXx78KRT0CPJINYXZl1MSFVX86RHiya', '6629df30e8f96.png', '2024-04-24 19:54:05', NULL, NULL, NULL, NULL, 1),
+(59, 'victor', 'Victor', '$2y$10$RkvoeTVuOVxRqW/VeANrHOfBZbUMFOPEPzSeAuf1Xr8Atouiik7Ry', '662c8077b2f91.jpg', '2024-04-26 04:30:59', 'Desenvolver', 'Dev', 19, 'dev ne pae', 0);
 
 --
 -- Acionadores `users`
@@ -370,7 +317,7 @@ CREATE TRIGGER `after_user_creation` AFTER INSERT ON `users` FOR EACH ROW BEGIN
   END IF;
 
   INSERT INTO chats (from_id, to_id, message, is_group_message, opened, created_at)
-  VALUES (12, NEW.user_id, 'Olá, tudo bem? sou o Unibot, o Bot oficial do chat Online, venho te informar que esse e um projeto de faculdade, não somos uma empresa registrada.', 0, 0, NOW());
+  VALUES (12, NEW.user_id, 'Somos um projeto criado por estudantes com o objetivo de desenvolver e testar tecnologias comunicativas. Todo o contexto usado aqui serve para fins educativos e de pesquisa estudantil.', 0, 0, NOW());
 END
 $$
 DELIMITER ;
@@ -446,25 +393,25 @@ ALTER TABLE `arquivos`
 -- AUTO_INCREMENT de tabela `chats`
 --
 ALTER TABLE `chats`
-  MODIFY `chat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
+  MODIFY `chat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=128;
 
 --
 -- AUTO_INCREMENT de tabela `conversations`
 --
 ALTER TABLE `conversations`
-  MODIFY `conversation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `conversation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT de tabela `groups`
 --
 ALTER TABLE `groups`
-  MODIFY `group_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `group_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT de tabela `group_chats`
 --
 ALTER TABLE `group_chats`
-  MODIFY `group_chat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `group_chat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=127;
 
 --
 -- AUTO_INCREMENT de tabela `password_resets`
@@ -476,7 +423,7 @@ ALTER TABLE `password_resets`
 -- AUTO_INCREMENT de tabela `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- Restrições para tabelas despejadas
