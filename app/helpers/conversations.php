@@ -1,7 +1,14 @@
 <?php 
 
 function getConversation($user_id, $conn){
-    $sql = "SELECT * FROM conversations WHERE user_1=? OR user_2=? ORDER BY conversation_id DESC";
+    // Ajuste a consulta SQL para incluir a tabela chats e ordenar pela coluna created_at
+    $sql = "SELECT conversations.*, MAX(chats.created_at) as last_message_time
+            FROM conversations
+            LEFT JOIN chats ON (chats.from_id = conversations.user_1 OR chats.from_id = conversations.user_2)
+            AND (chats.to_id = conversations.user_1 OR chats.to_id = conversations.user_2)
+            WHERE conversations.user_1 = ? OR conversations.user_2 = ?
+            GROUP BY conversations.conversation_id
+            ORDER BY last_message_time DESC";
     $stmt = $conn->prepare($sql);
     $stmt->execute([$user_id, $user_id]);
 
@@ -10,25 +17,24 @@ function getConversation($user_id, $conn){
         $user_data = [];
         
         foreach($conversations as $conversation){
-            if ($conversation['user_1'] == $user_id) {
-            	$sql2  = "SELECT * FROM users WHERE user_id=?";
-            	$stmt2 = $conn->prepare($sql2);
-            	$stmt2->execute([$conversation['user_2']]);
-            }else {
-            	$sql2  = "SELECT * FROM users WHERE user_id=?";
-            	$stmt2 = $conn->prepare($sql2);
-            	$stmt2->execute([$conversation['user_1']]);
-            }
+            // Verifique qual usuário não é o usuário atual e obtenha seus dados
+            $other_user_id = $conversation['user_1'] == $user_id ? $conversation['user_2'] : $conversation['user_1'];
+            $sql2  = "SELECT * FROM users WHERE user_id=?";
+            $stmt2 = $conn->prepare($sql2);
+            $stmt2->execute([$other_user_id]);
 
             $allConversations = $stmt2->fetchAll();
-            array_push($user_data, $allConversations[0]);
+            // Adicione a data da última mensagem aos dados do usuário
+            $conversationData = $allConversations[0];
+            $conversationData['last_message_time'] = $conversation['last_message_time'];
+            array_push($user_data, $conversationData);
         }
 
         return $user_data;
 
     }else {
-    	$conversations = [];
-    	return $conversations;
+        $conversations = [];
+        return $conversations;
     }  
 }
 ?>

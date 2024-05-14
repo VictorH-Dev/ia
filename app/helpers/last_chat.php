@@ -12,9 +12,8 @@ function lastChat($id_1, $id_2, $conn){
     if ($stmt->rowCount() > 0) {
         $chat = $stmt->fetch();
         $message = $chat['message'];
-        $limit = 50; // Set the character limit for the message
+        $limit = 50; 
 
-        // Truncate the message if it exceeds the limit
         if (strlen($message) > $limit) {
             return substr($message, 0, $limit) . '...';
         } else {

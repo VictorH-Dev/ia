@@ -16,6 +16,26 @@
   	}
   	$chats = getChats($_SESSION['user_id'], $chatWith['user_id'], $conn);
   	opened($chatWith['user_id'], $conn, $chats);
+      setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'portuguese');
+      function isPrimeiraMensagemDoDia($dataAtual, $ultimaData) {
+        return $ultimaData === null || $dataAtual->format('Y-m-d') !== $ultimaData->format('Y-m-d');
+    }
+ 
+    function formatarData($data) {
+        $diasDaSemana = [
+            'Sun' => 'dom',
+            'Mon' => 'seg',
+            'Tue' => 'ter',
+            'Wed' => 'qua',
+            'Thu' => 'qui',
+            'Fri' => 'sex',
+            'Sat' => 'sab'
+        ];
+        $diaSemanaIngles = strftime('%a', $data->getTimestamp());
+        $diaSemanaPortugues = $diasDaSemana[$diaSemanaIngles] ?? $diaSemanaIngles;
+        return $diaSemanaPortugues . strftime(', %d/%m', $data->getTimestamp());
+    }
+    
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -37,74 +57,71 @@
        .azuli{
         color: #0d6efd;
        }
-      
+       .message-actions i{
+        margin-left: 5px;
+        font-size: 18px;
+       }
+       .data-mensagem {
+        text-align: center;
+    margin: 20px 0;
+    color: #555;
+    font-size: 14px;
+}
+
     </style>
 </head>
-<body class="d-flex
-             justify-content-center
-             align-items-center
-             vh-100">
+<body class="d-flex justify-content-center align-items-center vh-100">
     <div class="w-400 shadow p-4 rounded">
-    	<a href="home.php"
-    	   class="fs-4 link-dark">&#8592;</a>
+        <a href="home.php" class="fs-4 link-dark">←</a>
 
-           <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center">
     <img src="uploads/perfis/<?=$chatWith['p_p']?>" class="w-15 rounded-circle">
     <h3 class="display-4 fs-sm m-2">
-        <?=$chatWith['name']?><br>
-        <div class="d-flex align-items-center" title="online">
+    <?=$chatWith['name']?>
+    <?php if ($chatWith['user_id'] == 12 || $chatWith['verificado'] == 1) { ?>
+        <span class="verified-badge">✅</span>
+    <?php } ?>
+    <br>
+        <small class="d-block">
             <?php
             $lastSeenText = last_seen($chatWith['visto']);
             if ($lastSeenText == 'Ativo Agora') {
+                echo '<span class="online"></span> Online';
+            } else {
+                echo 'Visto em: ' . $lastSeenText;
+            }
             ?>
-                <div class="online"></div>
-                <small class="d-block p-1">Online</small>
-            <?php } else { ?>
-                <small class="d-block p-1">
-                    Visto em: <?=$lastSeenText?>
-                </small>
-            <?php } ?>
-            <div class="d-flex align-items-center">
-
-
-
-        </div>
+        </small>
     </h3>
 </div>
-<div class="shadow p-4 rounded d-flex flex-column mt-2 chat-box" id="chatBox">
-    <?php 
-    if (!empty($chats)) {
-        foreach($chats as $chat){
-            if($chat['from_id'] == $_SESSION['user_id']) { ?>
-                <p class="rtext align-self-end border rounded p-2 mb-1">
-                    <?=htmlspecialchars($chat['message'], ENT_QUOTES, 'UTF-8')?>
-                    <small class="d-block">
-                    <?= date_format(date_create($chat['created_at']), 'd/m/Y H:i') ?>
-                    <span  class="azuli" class="message-actions">
-                      
-                        <i class="fa fa-trash icon" onclick="deleteMessage(<?=$chat['chat_id']?>)" title="Excluir mensagem"></i>
-                      
-                        <i class="fa fa-pencil icon" onclick="editMessage(<?=$chat['chat_id']?>, '<?=addslashes($chat['message'])?>')" title="Editar mensagem"></i>
-                    </span>
-                    </small>
-                   
-                    
-                </p>
-            <?php } else { ?>
-                <p class="ltext border rounded p-2 mb-1">
-                    <?=htmlspecialchars($chat['message'], ENT_QUOTES, 'UTF-8')?>
-                    <small class="d-block">
-                    <?= date_format(date_create($chat['created_at']), 'd/m/Y H:i') ?>
-                    </small>      
-                </p>
-            <?php }
+
+        <div class="shadow p-4 rounded d-flex flex-column mt-2 chat-box" id="chatBox">
+    <?php
+    $ultimaData = null;
+    foreach ($chats as $chat) {
+        $dataAtual = new DateTime($chat['created_at']);
+        $horaMensagem = $dataAtual->format('H:i');
+
+        if (isPrimeiraMensagemDoDia($dataAtual, $ultimaData)) {
+            $dataFormatada = formatarData($dataAtual);
+            echo '<div class="data-mensagem">' . $dataFormatada . '</div>';
+            $ultimaData = $dataAtual;
         }
-    } else { ?>
-        <div class="alert alert-info text-center">
-            <i class="fa fa-comments d-block fs-big"></i>
-            Não existe mensagem nessa conversa!
-        </div>
-    <?php } ?>
+
+        echo '<p class="' . ($chat['from_id'] == $_SESSION['user_id'] ? 'rtext align-self-end' : 'ltext') . ' border rounded p-2 mb-1">';
+        echo htmlspecialchars($chat['message'], ENT_QUOTES, 'UTF-8');
+        if ($chat['from_id'] == $_SESSION['user_id']) {
+            echo '<small class="d-block">' . $horaMensagem;
+            echo '<span class="azuli message-actions">';
+            echo '<i class="fa fa-trash icon" onclick="deleteMessage(' . $chat['chat_id'] . ')" title="Excluir mensagem"></i>';
+            echo '<i class="fa fa-pencil icon" onclick="editMessage(' . $chat['chat_id'] . ', \'' . addslashes($chat['message']) . '\')" title="Editar mensagem"></i>';
+            echo '</span></small>';
+        } else {
+            echo '<small class="d-block">' . $horaMensagem . '</small>';
+        }
+        echo '</p>';
+    }
+    ?>
 </div>
 	
 <div class="input-group mb-3">

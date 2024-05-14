@@ -29,6 +29,9 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <style>
+    * {
+    transition: all 0.3s ease;
+}
 	.menu-btn {
     background-color: #007bff; 
     color: white; 
@@ -71,6 +74,83 @@
     max-height: 400px;
     overflow-y: auto; 
 }
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000000000px;
+}
+.input-group .btn {
+    position: relative;
+    z-index: 1;
+}
+.modal-content {
+    background-color: white;
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+
+textarea,
+input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+
+@media screen and (max-width: 600px) {
+    .modal-content {
+        max-width: 90%;
+    }
+}
+.profile-image-small{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.verified-badge {
+    display: inline;
+    margin-left: 5px; /* Ajuste conforme necessário para aproximar do nome */
+}
+
+.ms-2 {
+    margin-left: 0.5rem; /* Ajuste para alinhar com o nome */
+}
+
+.fs-xs {
+    margin-bottom: 0; /* Remove a margem inferior para alinhar com a última mensagem */
+}
+
 </style>
 </head>
 
@@ -104,7 +184,7 @@ class="d-flex
 
     		<div class="input-group mb-3">
     			<input type="text"
-    			       placeholder="Search..."
+    			       placeholder="Pesquisar..."
     			       id="searchText"
     			       class="form-control">
     			<button class="btn btn-primary" 
@@ -113,38 +193,38 @@ class="d-flex
     			</button>       
     		</div>
 			
-    		<ul id="chatList"
-    		    class="list-group mvh-50 overflow-auto">
-    			<?php if (!empty($conversations)) { ?>
-    			    <?php 
+            <ul id="chatList" class="list-group mvh-50 overflow-auto">
+    <?php if (!empty($conversations)) { ?>
+        <?php foreach ($conversations as $conversation) { ?>
+            <li class="list-group-item">
+                <a href="chat.php?user=<?=$conversation['username']?>"
+                   class="d-flex justify-content-between align-items-center p-2">
+                    <div class="d-flex align-items-center">
+                        <img src="uploads/perfis/<?=$conversation['p_p']?>"
+                             class="w-10 rounded-circle">
+                        <div class="ms-2">
+                            <h3 class="fs-xs">
+                                <?=$conversation['name']?>
+                                <?php if ($conversation['user_id'] == 12 || $conversation['verificado'] == 1) { ?>
+                                    <span class="verified-badge">✅</span>
+                                <?php } ?>
+                            </h3>
+                            <small>
+                                <?php 
+                                    echo lastChat($_SESSION['user_id'], $conversation['user_id'], $conn);
+                                ?>
+                            </small>
+                        </div>            	
+                    </div>
+                    <?php if (last_seen($conversation['visto']) == "Active") { ?>
+                        <div title="online">
+                            <div class="online"></div>
+                        </div>
+                    <?php } ?>
+                </a>
+            </li>
 
-    			    foreach ($conversations as $conversation){ ?>
-	    			<li class="list-group-item">
-	    				<a href="chat.php?user=<?=$conversation['username']?>"
-	    				   class="d-flex
-	    				          justify-content-between
-	    				          align-items-center p-2">
-	    					<div class="d-flex
-	    					            align-items-center">
-	    					    <img src="uploads/perfis/<?=$conversation['p_p']?>"
-	    					         class="w-10 rounded-circle">
-	    					    <h3 class="fs-xs m-2">
-	    					    	<?=$conversation['name']?><br>
-                      <small>
-                        <?php 
-                          echo lastChat($_SESSION['user_id'], $conversation['user_id'], $conn);
-                        ?>
-                      </small>
-	    					    </h3>            	
-	    					</div>
-	    					<?php if (last_seen($conversation['visto']) == "Active") { ?>
-		    					<div title="online">
-		    						<div class="online"></div>
-		    					</div>
-	    					<?php } ?>
-	    				</a>
-	    			</li>
-                    
+
     			    <?php } ?>
     			<?php }else{ ?>
     				<div class="alert alert-info 
@@ -165,7 +245,27 @@ class="d-flex
         </button>
         <div id="dropdown-menu" class="dropdown-menu">
             <a href="#" class="excluir-conta">Excluir Conta</a>
-        </div>
+            <a href="#" class="notificacao">Notificação</a>
+            <a href="#" id="openProfileModal">Perfil</a>
+
+            <div id="profileModal" class="modal">
+    <div class="modal-content">
+        <h2>Perfil do Usuário</h2>
+        <p>Foto Perfil: <img src="uploads/perfis/<?=$user['p_p']?>" class="profile-image-small" alt=""></p>
+        <p>Nome: <?=$user['name']?></p>
+        <p>Nome de Usuário: <?=$user['username']?></p>
+        <form action="salvar_perfil.php" method="post">
+            <label for="biografia">Biografia:</label>
+            <textarea id="biografia" name="biografia" rows="4" cols="50"><?=$user['biography']?></textarea>
+            <label for="hobbies">Hobbies:</label>
+            <input type="text" id="hobbies" name="hobbies" value="<?=$user['hobbies']?>">
+            <label for="profession">Profissão:</label>
+            <input type="text" id="profession" name="profession" value="<?=$user['profession']?>">
+            <label for="age">Idade:</label>
+            <input type="number" id="age" name="age" value="<?=$user['age']?>">
+            <button id="saveProfileButton" type="submit">Salvar</button>
+        </form>
+        <button id="closeProfileModal">Fechar</button>
     </div>
 </div>
 	  
@@ -173,7 +273,26 @@ class="d-flex
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script>
-	
+
+function togglePasswordVisibility() {
+    const senhaInput = document.getElementById('senha');
+    const toggleSenha = document.getElementById('toggleSenha');
+
+    if (senhaInput.type === 'password') {
+        senhaInput.type = 'text';
+        toggleSenha.innerHTML = '<i class="fa fa-eye-slash"></i>';
+    } else {
+        senhaInput.type = 'password';
+        toggleSenha.innerHTML = '<i class="fa fa-eye"></i>';
+    }
+}
+	     document.getElementById('openProfileModal').addEventListener('click', function() {
+            document.getElementById('profileModal').style.display = 'block';
+        });
+
+        document.getElementById('closeProfileModal').addEventListener('click', function() {
+            document.getElementById('profileModal').style.display = 'none';
+        });
 	document.addEventListener('DOMContentLoaded', function() {
     var excluirContaBtn = document.querySelector('.excluir-conta');
     excluirContaBtn.addEventListener('click', function(event) {

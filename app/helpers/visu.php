@@ -1,6 +1,6 @@
 <?php
 
-$mysqli = new mysqli("localhost", "root", "929305", "chat_app_db");
+$mysqli = new mysqli("localhost", "root", "", "chat_app_db");
 
 if ($mysqli->connect_error) {
     die("Conexão falhou: " . $mysqli->connect_error);
